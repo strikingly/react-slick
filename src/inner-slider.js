@@ -50,8 +50,10 @@ export var InnerSlider = React.createClass({
       });
     }
 
-    if (typeof window === 'undefined') {
+    if (__SERVER_RENDERING__) {
       this.serverInitialize(this.props);
+    } else {
+      this.setState({ initialized: true });
     }
   },
   componentDidMount: function componentDidMount() {
