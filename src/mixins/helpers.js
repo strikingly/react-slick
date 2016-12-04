@@ -356,7 +356,7 @@ var helpers = {
     if (this.state.autoPlayTimer) {
       clearTimeout(this.state.autoPlayTimer);
       this.setState({
-        autoPlayTimer: null
+          autoPlayTimer: null
       });
     }
   }
