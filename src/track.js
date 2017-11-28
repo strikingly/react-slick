@@ -13,7 +13,6 @@ var getSlideClasses = (spec) => {
   } else {
     index = spec.index;
   }
-
   slickCloned = (index < 0) || (index >= spec.slideCount);
   if (spec.centerMode) {
     centerOffset = Math.floor(spec.slidesToShow / 2);
@@ -78,14 +77,7 @@ var renderSlides = function (spec) {
       child = (<div></div>);
     }
     var childStyle = getSlideStyle(assign({}, spec, {index: index}));
-    var slickClasses = getSlideClasses(assign({index: index}, spec));
-    var cssClasses;
-
-    if (child.props.className) {
-        cssClasses = classnames(slickClasses, child.props.className);
-    } else {
-        cssClasses = slickClasses;
-    }
+    const slideClass = child.props.className || ''
 
     const onClick = function(e) {
       child.props && child.props.onClick && child.props.onClick(e)
@@ -97,7 +89,7 @@ var renderSlides = function (spec) {
     slides.push(React.cloneElement(child, {
       key: 'original' + getKey(child, index),
       'data-index': index,
-      className: cssClasses,
+      className: classnames(getSlideClasses(assign({index: index}, spec)), slideClass),
       tabIndex: '-1',
       style: assign({outline: 'none'}, child.props.style || {}, childStyle),
       onClick
@@ -112,7 +104,7 @@ var renderSlides = function (spec) {
         preCloneSlides.push(React.cloneElement(child, {
           key: 'precloned' + getKey(child, key),
           'data-index': key,
-          className: cssClasses,
+          className: classnames(getSlideClasses(assign({index: key}, spec)), slideClass),
           style: assign({}, child.props.style || {}, childStyle),
           onClick
         }));
@@ -123,7 +115,7 @@ var renderSlides = function (spec) {
         postCloneSlides.push(React.cloneElement(child, {
           key: 'postcloned' + getKey(child, key),
           'data-index': key,
-          className: cssClasses,
+          className: classnames(getSlideClasses(assign({index: key}, spec)), slideClass),
           style: assign({}, child.props.style || {}, childStyle),
           onClick
         }));
@@ -140,8 +132,8 @@ var renderSlides = function (spec) {
 
 };
 
-export var Track = React.createClass({
-  render: function () {
+export class Track extends React.Component {
+  render() {
     var slides = renderSlides.call(this, this.props);
     return (
       <div className='slick-track' style={this.props.trackStyle}>
@@ -149,4 +141,4 @@ export var Track = React.createClass({
       </div>
     );
   }
-});
+}
